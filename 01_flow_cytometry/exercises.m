@@ -2,23 +2,23 @@
 % Preliminaries: set up TASBE analytics package:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% addpath('~/cur_proj/SynBioIRAD/TASBE_Analytics/');
+% example: addpath('~/Downloads/TASBEFlowAnalytics/');
 addpath('your-path-to-analytics');
 % turn off sanitized filename warnings:
 warning('off','TASBE:SanitizeName');
 
-colordata = '../../colortest/';
-dosedata = '../../plasmidtest/';
+colordata = '../example_controls/';
+dosedata = '../example_assay/';
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Examples of flow data
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% pure scatter
+% pure scatter - often hard to interpret
 fcs_scatter([dosedata 'LacI-CAGop_C4_C04_P3.fcs'],'PE-Tx-Red-YG-A','Pacific Blue-A',0,[0 0; 6 6],1);
 fcs_scatter([colordata '07-29-11_EYFP_P3.fcs'],'FITC-A','Pacific Blue-A',0,[0 0; 6 6],1);
-% smoothed density plot
+% smoothed density plot omits details but often summarizes collective better
 data1 = fcs_scatter([dosedata 'LacI-CAGop_C4_C04_P3.fcs'],'PE-Tx-Red-YG-A','Pacific Blue-A',1,[0 0; 6 6],1);
 data2 = fcs_scatter([colordata '07-29-11_EYFP_P3.fcs'],'FITC-A','Pacific Blue-A',1,[0 0; 6 6],1);
 
@@ -68,15 +68,16 @@ sum(data(:,7)<=0)
 
 data(data(:,7)>260000,7)
 % ans = 262143
-% How high was this really?  We cannot know...
+% How high was this really?  We cannot know because it is saturated!
 
 
 
 
 channels = {};
-channels{1} = Channel('', 'Pacific Blue-A', '',234,456);
-channels{2} = Channel('', 'PE-Tx-Red-YG-A', '',890,123);
-channels{3} = Channel('', 'FITC-A', '',789,345);
+
+channels{1} = Channel('Pacific Blue-A', 405, 450, 50);
+channels{2} = Channel('PE-Texas Red-A', 561, 610, 20);
+channels{3} = Channel('FITC-A', 488, 530, 30);
 CM = ColorModel('','',channels,{{},{},{}},{});
 
 filtered = read_filtered_au(CM,[colordata '07-29-11_EYFP_P3.fcs']);
@@ -88,4 +89,4 @@ CM = set_dequantization(CM,true);
 xc = dequantized(:,10); yc = dequantized(:,11);
 pos = xc>0 & yc>0;
 figure; smoothhist2D(log10([xc(pos) yc(pos)]),10,[200, 200],[],'image',[0 0; 6 6]);
-% quantization gets smoothed out by introduction of small noise
+% if desired, quantization can be smoothed out by introduction of small noise

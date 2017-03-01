@@ -2,13 +2,13 @@
 % Preliminaries: set up TASBE analytics package:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% addpath('~/cur_proj/SynBioIRAD/TASBE_Analytics/');
+% example: addpath('~/Downloads/TASBEFlowAnalytics/');
 addpath('your-path-to-analytics');
 % turn off sanitized filename warnings:
 warning('off','TASBE:SanitizeName');
 
-colordata = '../../colortest/';
-dosedata = '../../plasmidtest/';
+colordata = '../example_controls/';
+dosedata = '../example_assay/';
 
 
 
@@ -38,17 +38,23 @@ fcs_scatter([colordata '2012-03-12_EBFP2_EYFP_P3.fcs'],'Pacific Blue-A','FITC-A'
 [raw hdr data] = fca_readfcs([colordata '07-29-11_blank_P3.fcs']);
 % histogram of EBFP2:
 figure; hist(data(:,10),100);
-% with randomization:
+% with random blurring to damp quanization:
 figure; hist(data(:,10)+(rand(size(data(:,10)))-0.5),100);
 % Notice that the presence of negative values means that we are necessarily dealing with a combination
-% of autofluorescence and read error.  We currently don't know how to separate these from one another.
+% of autofluorescence and instrument error.  There is not currently any elegant way of separating these.
 
 % fit to a gaussian model:
-mean(data(:,10))
-std(data(:,10))
+mu = mean(data(:,10))
+sigma = std(data(:,10))
+
+% Notice that the fit is pretty good:
+range = -100:5:150;
+figure;
+plot(range,histc(data(:,10),range),'b-'); hold on;
+plot(range,numel(data(:,10))*5*normpdf(range,mu,sigma),'r--');
 
 
-% we can simulate a distribution as a sum of three terms: random (bled) signal, autofluorescence, and read error
+% we can simulate a distribution as a sum of three terms: random (bleed) signal, autofluorescence, and read error
 % here are some arbitrary values to explore as an example:
 n = 1e5; 
 signal = 10.^(randn(n,1)*1+2.5);
@@ -85,24 +91,25 @@ beadfile = [colordata '2012-03-12_Beads_P3.fcs'];
 blankfile = [colordata '2012-03-12_blank_P3.fcs'];
 
 channels = {}; colorfiles = {};
-channels{1} = Channel('Pacific Blue-A', 405,0,0);
+channels{1} = Channel('Pacific Blue-A', 405,450,50);
 channels{1} = setPrintName(channels{1},'Blue');
 colorfiles{1} = [colordata '2012-03-12_ebfp2_P3.fcs'];
 channels{2} = Channel('PE-Tx-Red-YG-A', 561,610,20);
 channels{2} = setPrintName(channels{2},'Red');
 colorfiles{2} = [colordata '2012-03-12_mkate_P3.fcs'];
-channels{3} = Channel('FITC-A', 488,515,20);
+channels{3} = Channel('FITC-A', 488,530,30);
 channels{3} = setPrintName(channels{3},'Yellow');
 colorfiles{3} = [colordata '2012-03-12_EYFP_P3.fcs'];
 
 colorpairfiles = {};
 CM = ColorModel(beadfile, blankfile, channels, colorfiles, colorpairfiles);
+CM = set_FITC_channel_name(CM, 'FITC-A'); % We'll explain this in the next exercise
 settings = TASBESettings();
 
 % Now let's read some files...
 raw = read_filtered_au(CM,[dosedata 'LacI-CAGop_C3_C03_P3.fcs']);
 compensated = readfcs_compensated_au(CM,[dosedata 'LacI-CAGop_C3_C03_P3.fcs'],0,1);
-% oops!  Need to resolve our color model first!
+% You should see an error: need to "resolve" the color model first!
 
 CM = resolve(CM,settings);
 
@@ -163,11 +170,3 @@ xlim([1e0 1e6]); ylim([1e0 1e6]); xlabel('PE-Tx-Red-YG a.u.'); ylabel('FITC a.u.
 
 % An important question for the future:
 % We need to be able to set error bars on the data points that we correct.  Can we?
-
-
-
-
-
-
-
-
