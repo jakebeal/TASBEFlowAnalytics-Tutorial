@@ -2,20 +2,20 @@
 % Preliminaries: set up TASBE analytics package:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% addpath('~/cur_proj/SynBioIRAD/TASBE_Analytics/');
+% example: addpath('~/Downloads/TASBEFlowAnalytics/');
 addpath('your-path-to-analytics');
 % turn off sanitized filename warnings:
 warning('off','TASBE:SanitizeName');
 
-colordata = '../../colortest/';
-dosedata = '../../plasmidtest/';
+colordata = '../example_controls/';
+dosedata = '../example_assay/';
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Calibration beads:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Let's look at an example of RCP-30-5A calibration beads:
+% Let's look at an example of SpheroTech RCP-30-5A calibration beads:
 fcs_scatter([colordata '2012-03-12_Beads_P3.fcs'],'Pacific Blue-A','PE-Tx-Red-YG-A',1,[0 0; 6 6],1);
 % and without blending...
 fcs_scatter([colordata '2012-03-12_Beads_P3.fcs'],'Pacific Blue-A','PE-Tx-Red-YG-A',0,[0 0; 6 6],1);
@@ -52,13 +52,13 @@ beadfile = [colordata '2012-03-12_Beads_P3.fcs'];
 blankfile = [colordata '2012-03-12_blank_P3.fcs'];
 
 channels = {}; colorfiles = {};
-channels{1} = Channel('Pacific Blue-A', 405,0,0);
+channels{1} = Channel('Pacific Blue-A', 405,450,50);
 channels{1} = setPrintName(channels{1},'Blue');
 colorfiles{1} = [colordata '2012-03-12_ebfp2_P3.fcs'];
 channels{2} = Channel('PE-Tx-Red-YG-A', 561,610,20);
 channels{2} = setPrintName(channels{2},'Red');
 colorfiles{2} = [colordata '2012-03-12_mkate_P3.fcs'];
-channels{3} = Channel('FITC-A', 488,515,20);
+channels{3} = Channel('FITC-A', 488,530,30);
 channels{3} = setPrintName(channels{3},'Yellow');
 colorfiles{3} = [colordata '2012-03-12_EYFP_P3.fcs'];
 
@@ -69,6 +69,7 @@ colorpairfiles{3} = {channels{2}, channels{1}, channels{3}, [colordata '2012-03-
 
 CM = ColorModel(beadfile, blankfile, channels, colorfiles, colorpairfiles);
 settings = TASBESettings();
+CM = set_FITC_channel_name(CM, 'FITC-A'); % Name the channel we'll use for MEFL units
 CM=set_dequantization(CM, 1); % important at low levels
 CM=set_bead_plot(CM, 2); % 2 = show beads for all channels, even though only FITC will be used
 CM=set_bead_min(CM, 1); % Don't consider beads less than this amount
