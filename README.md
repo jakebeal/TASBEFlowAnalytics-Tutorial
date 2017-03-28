@@ -7,6 +7,9 @@ This tutorial has three units:
 2. Autofluorescence and Compensation in Cells
 3. From Arbitrary to Absolute Units
 
+Full examples of making color models and using them to analyze are in
+directories template_analysis and teamplate_colormodel
+
 Example code in this tutorial is distributed, insofar as possible, in
 the public domain.
 
