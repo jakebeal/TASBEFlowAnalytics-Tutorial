@@ -49,6 +49,9 @@ CM=set_bead_plot(CM, 2); % 2 = detailed plots; 1 = minimal plot; 0 = no plot
 CM=set_translation_plot(CM, true);
 CM=set_noise_plot(CM, true);
 
+CM=set_bead_model(CM,'SpheroTech RCP-30-5A'); % Entry from BeadCatalog.xls matching your beads
+CM=set_bead_batch(CM,'Lot AA01, AA02, AA03, AA04, AB01, AB02, AC01, GAA01-R'); % Entry from BeadCatalog.xls containing your lot
+
 % Ignore all bead data below 10^[bead_min] as being too "smeared" with noise
 CM=set_bead_min(CM, 2);
 % The peak threshold determines the minumum count per bin for something to
