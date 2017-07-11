@@ -37,9 +37,11 @@ channels{3} = setPrintName(channels{3}, 'EBFP2');
 channels{3} = setLineSpec(channels{3}, 'b');
 colorfiles{3} = [stem0312 'ebfp2_P3.fcs'];
 
-% Multi-color controls are used for converting other colors into FITC units
+% Multi-color controls are used for converting other colors into MEFL units
+% Any channel without a control mapping it to MEFL will be left in arbirary units.
 colorpairfiles = {};
 % Entries are: channel1, channel2, constitutive channel, filename
+% This allows channel1 and channel2 to be converted into one another.
 % If you only have two colors, you can set consitutive-channel to equal channel1 or channel2
 colorpairfiles{1} = {channels{1}, channels{2}, channels{3}, [stem0312 'mkate_EBFP2_EYFP_P3.fcs']};
 colorpairfiles{2} = {channels{1}, channels{3}, channels{2}, [stem0312 'mkate_EBFP2_EYFP_P3.fcs']};
