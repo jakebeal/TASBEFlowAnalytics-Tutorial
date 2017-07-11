@@ -16,7 +16,7 @@ AGP = AutogateParameters();
 % non-cell or clump component.  More complex distributions may need more.
 %AGP.k_components = 2;
 %AGP.selected_components = [1];
-autogate = autodetect_gating(blankfile,AGP);
+autogate = autodetect_gating(blankfile,AGP,'plots');
 
 % Create one channel / colorfile pair for each color
 channels = {}; colorfiles = {};
@@ -51,6 +51,7 @@ CM=set_noise_plot(CM, true);
 
 CM=set_bead_model(CM,'SpheroTech RCP-30-5A'); % Entry from BeadCatalog.xls matching your beads
 CM=set_bead_batch(CM,'Lot AA01, AA02, AA03, AA04, AB01, AB02, AC01, GAA01-R'); % Entry from BeadCatalog.xls containing your lot
+% Can also set bead channel if, for some reason, you don't want to use fluorescein as standard
 
 % Ignore all bead data below 10^[bead_min] as being too "smeared" with noise
 CM=set_bead_min(CM, 2);
@@ -62,6 +63,7 @@ CM=set_FITC_channel_name(CM, 'FITC-A');
 CM=set_translation_channel_min(CM,[2,2,2]);
 
 settings = TASBESettings();
+settings = setSetting(settings, 'path', 'plots');
 % When dealing with very strong fluorescence, use secondary channel to segment
 %settings = setSetting(settings,'SecondaryBeadChannel','PE-Texas_Red-A');
 CM = add_filter(CM,autogate);
