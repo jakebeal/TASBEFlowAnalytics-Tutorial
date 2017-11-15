@@ -23,6 +23,9 @@ AP=setMinValidCount(AP,100');
 AP=setPemDropThreshold(AP,5');
 % Add autofluorescence back in after removing for compensation?
 AP=setUseAutoFluorescence(AP,false');
+% By default, analysis tries to fit constitutive to “transformed” and “non-transformed” components
+% If your distribution is more complex or less complex, you can change the number of components
+% AP=setNumGaussianComponents(AP,3);
 
 % Make a map of the batches of plus/minus comparisons to test
 % This analysis supports two variables: a +/- variable and a "tuning" variable
