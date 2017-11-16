@@ -25,7 +25,7 @@ channels = {}; colorfiles = {};
 channels{1} = Channel('FITC-A', 488, 515, 20);
 channels{1} = setPrintName(channels{1}, 'EYFP'); % Name to print on charts
 channels{1} = setLineSpec(channels{1}, 'y'); % Color for lines, when needed
-colorfiles{1} = [stem0312 'EYFP_P3.fcs']; % If there is only one channel, the color file is optional
+colorfiles{1} = [stem0312 'EYFP_P3.fcs'];
 
 channels{2} = Channel('PE-Tx-Red-YG-A', 561, 610, 20);
 channels{2} = setPrintName(channels{2}, 'mKate');
