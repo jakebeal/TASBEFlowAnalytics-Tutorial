@@ -39,9 +39,10 @@ fcs_scatter([colordata '2012-03-12_Beads_P3.fcs'],'PE-Tx-Red-YG-A','FITC-A',0,[0
 
 % Each channel is calibrated to a separate standard fluorophore.  The units
 % are ME[F]: Mean Equivalent [Fluorophore abbreviation].
-% They are also generically called MESF (Mean Equivalent Standard Fluorophore), 
+% They are also generically called ERF (Equivalent Reference Fluorophore), 
+% or MESF (Mean Equivalent Standard Fluorophore)
 % which is problematic because it makes different units appear the same.
-% We standardize on one: MEFL, from the FITC channel
+% We recommend standardizing on one: MEFL, from the FITC channel
 
 % So, beads give us the ability to standardize any channel, but no converstion
 % between the units of channels.  That is what we do with multi-color controls (next section)
@@ -69,7 +70,7 @@ colorpairfiles{3} = {channels{2}, channels{1}, channels{3}, [colordata '2012-03-
 
 CM = ColorModel(beadfile, blankfile, channels, colorfiles, colorpairfiles);
 settings = TASBESettings();
-CM = set_FITC_channel_name(CM, 'FITC-A'); % Name the channel we'll use for MEFL units
+CM = set_ERF_channel_name(CM, 'FITC-A'); % Name the channel we'll use for ERF units
 CM=set_dequantization(CM, 1); % important at low levels
 CM=set_bead_plot(CM, 2); % 2 = show beads for all channels, even though only FITC will be used
 CM=set_bead_min(CM, 1); % Don't consider beads less than this amount
@@ -124,7 +125,7 @@ CM = resolve(CM,settings);
 % Translation between channels:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% How do we measure red or blue in MEFL?
+% How do we measure red or blue in ERF?
 % Note that the different channels have wildly different calibrations!
 % We need a conversion factor on our fluorophores, to answer questions
 % of the form: "what if I had used yellow here instead of red?"

@@ -9,7 +9,7 @@ device_name = 'LacI-CAGop';
 inducer_name = '100xDox';
 
 % Configure the analysis
-% Analyze on a histogram of 10^[first] to 10^[third] MEFL, with bins every 10^[second]
+% Analyze on a histogram of 10^[first] to 10^[third] ERF, with bins every 10^[second]
 bins = BinSequence(4,0.1,10,'log_bins');
 
 % Designate which channels have which roles
