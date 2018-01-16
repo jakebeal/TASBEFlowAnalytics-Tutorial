@@ -37,8 +37,8 @@ channels{3} = setPrintName(channels{3}, 'EBFP2');
 channels{3} = setLineSpec(channels{3}, 'b');
 colorfiles{3} = [stem0312 'ebfp2_P3.fcs'];
 
-% Multi-color controls are used for converting other colors into MEFL units
-% Any channel without a control mapping it to MEFL will be left in arbirary units.
+% Multi-color controls are used for converting other colors into ERF units
+% Any channel without a control mapping it to ERF will be left in arbirary units.
 colorpairfiles = {};
 % Entries are: channel1, channel2, constitutive channel, filename
 % This allows channel1 and channel2 to be converted into one another.
@@ -60,7 +60,7 @@ CM=set_bead_min(CM, 2);
 % The peak threshold determines the minumum count per bin for something to
 % be considered part of a peak.  Set if automated threshold finds too many or few peaks
 %CM=set_bead_peak_threshold(CM, 200);
-CM=set_FITC_channel_name(CM, 'FITC-A');
+CM=set_ERF_channel_name(CM, 'FITC-A');
 % Ignore channel data for ith channel if below 10^[value(i)]
 CM=set_translation_channel_min(CM,[2,2,2]);
 

@@ -103,7 +103,7 @@ colorfiles{3} = [colordata '2012-03-12_EYFP_P3.fcs'];
 
 colorpairfiles = {};
 CM = ColorModel(beadfile, blankfile, channels, colorfiles, colorpairfiles);
-CM = set_FITC_channel_name(CM, 'FITC-A'); % We'll explain this in the next exercise
+CM = set_ERF_channel_name(CM, 'FITC-A'); % We'll explain this in the next exercise
 settings = TASBESettings();
 
 % Now let's read some files...
@@ -114,7 +114,7 @@ compensated = readfcs_compensated_au(CM,[dosedata 'LacI-CAGop_C3_C03_P3.fcs'],0,
 CM = resolve(CM,settings);
 
 % Ignore the warnings about finding only one bead peak and translation and 
-% mapping files: those have to do with MEFL conversion, which we'll cover
+% mapping files: those have to do with ERF conversion, which we'll cover
 % in our next exercise
 
 % Resolving the colormodel just produced a whol lot of files: let's take a

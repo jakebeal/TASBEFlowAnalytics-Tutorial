@@ -8,7 +8,7 @@ load('../template_colormodel/CM120312.mat');
 experimentName = 'LacI Transfer Curve';
 
 % Configure the analysis
-% Analyze on a histogram of 10^[first] to 10^[third] MEFL, with bins every 10^[second]
+% Analyze on a histogram of 10^[first] to 10^[third] ERF, with bins every 10^[second]
 bins = BinSequence(4,0.1,10,'log_bins');
 
 % Designate which channels have which roles
@@ -19,7 +19,7 @@ AP=setMinValidCount(AP,100');
 AP=setPemDropThreshold(AP,5');
 % Add autofluorescence back in after removing for compensation?
 AP=setUseAutoFluorescence(AP,false');
-% By default, analysis tries to fit constitutive to transformedù and non-transformedù components
+% By default, analysis tries to fit constitutive to transformed and non-transformed components
 % If your distribution is more complex or less complex, you can change the number of components
 % AP=setNumGaussianComponents(AP,3);
 
@@ -50,7 +50,7 @@ n_conditions = size(file_pairs,1);
 % Make output plots
 OS = OutputSettings('LacI-CAGop','','','plots');
 OS.FixedInputAxis = [1e4 1e10];
-plot_batch_histograms(results,sampleresults,OS,{'b','y','r'});
+plot_batch_histograms(results,sampleresults,OS,{'b','y','r'},CM);
 
 save('LacI-CAGop-batch.mat','AP','bins','file_pairs','OS','results','sampleresults');
 
